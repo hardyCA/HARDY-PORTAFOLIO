@@ -6,7 +6,6 @@ import { Section } from '@/components/ui/Section'
 import { Container } from '@/components/ui/Container'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 import { Button } from '@/components/ui/Button'
-import { scrollToSection } from '@/hooks/useSmoothScroll'
 
 export function Contact() {
   const [submitted, setSubmitted] = useState(false)

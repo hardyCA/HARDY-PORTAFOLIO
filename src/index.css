@@ -2,7 +2,7 @@
 
 @theme {
   --font-sans: "Inter", system-ui, sans-serif;
-  --font-heading: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-heading: "Space Grotesk", system-ui, sans-serif;
 
   --color-dark-50: #f8f8fc;
   --color-dark-100: #e2e2ed;
@@ -83,6 +83,28 @@
   ::-webkit-scrollbar-track { background: var(--color-dark-950); }
   ::-webkit-scrollbar-thumb { background: var(--color-dark-700); border-radius: 3px; }
   ::-webkit-scrollbar-thumb:hover { background: var(--color-dark-600); }
+}
+
+@layer base {
+  h1, h2, h3, h4 {
+    text-wrap: balance;
+    letter-spacing: -0.02em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .hover-scale { transform: none !important; }
+  [class*="group-hover:"] { opacity: 1 !important; }
+  .group:hover .group-hover\:opacity-100 { opacity: 1 !important; }
 }
 
 @layer utilities {

@@ -1,6 +1,5 @@
 'use client'
 
-import { motion } from 'framer-motion'
 import { scrollToSection } from '@/hooks/useSmoothScroll'
 import { Container } from '@/components/ui/Container'
 

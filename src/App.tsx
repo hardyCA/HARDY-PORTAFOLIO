@@ -10,6 +10,7 @@ import { DemoSection } from '@/components/sections/DemoSection'
 import { Testimonials } from '@/components/sections/Testimonials'
 import { CTASection } from '@/components/sections/CTASection'
 import { Contact } from '@/components/sections/Contact'
+import { Clients } from '@/components/sections/Clients'
 import { MouseGlow } from '@/components/effects/MouseGlow'
 import { ParticlesBackground } from '@/components/effects/ParticlesBackground'
 import { WhatsAppButton } from '@/components/layout/WhatsAppButton'
@@ -22,10 +23,11 @@ export default function App() {
       <Navbar />
       <main>
         <Hero />
+        <Clients />
         <Services />
+        <DemoSection />
         <Projects />
         <Process />
-        <DemoSection />
         <Testimonials />
         <CTASection />
         <Contact />

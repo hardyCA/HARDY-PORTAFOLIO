@@ -457,18 +457,89 @@ export function DemoSection() {
                 )}
               </AnimatePresence>
 
-              {/* Table */}
-              <div className="overflow-x-auto -mx-5 sm:-mx-6">
+              {/* Mobile Cards */}
+              <div className="block md:hidden space-y-3">
+                <AnimatePresence mode="popLayout">
+                  {products.map((product) => {
+                    const st = statusConfig[product.status]
+                    const margin = product.cost > 0 ? Math.round((1 - product.cost / product.price) * 100) : 0
+                    return (
+                      <motion.div
+                        key={product.id}
+                        layout
+                        initial={{ opacity: 0, y: -8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, x: -20 }}
+                        transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                        className="rounded-2xl border border-white/5 bg-dark-800/30 p-4"
+                      >
+                        <div className="flex items-start justify-between gap-3 mb-3">
+                          <div className="flex items-center gap-3">
+                            <ProductThumb product={product} size="sm" />
+                            <div>
+                              <div className="text-sm font-medium text-dark-100">{product.name}</div>
+                              <div className="text-[10px] text-dark-500 font-mono">{product.id}</div>
+                            </div>
+                          </div>
+                          <span className={`inline-flex items-center gap-1.5 text-[10px] font-semibold px-2.5 py-1 rounded-full ${st.bg} ${st.text} shrink-0`}>
+                            <span className={`w-1.5 h-1.5 rounded-full ${st.dot}`} />
+                            {st.label}
+                          </span>
+                        </div>
+
+                        <div className="grid grid-cols-3 gap-2 text-center mb-3">
+                          <div>
+                            <div className="text-xs font-mono font-medium text-dark-100">${product.price.toFixed(2)}</div>
+                            <div className="text-[10px] text-dark-500">Precio</div>
+                          </div>
+                          <div>
+                            <div className={`text-xs font-mono font-medium ${product.status === 'out' ? 'text-red-400' : product.status === 'low' ? 'text-amber-400' : 'text-dark-100'}`}>
+                              {product.stock}
+                            </div>
+                            <div className="text-[10px] text-dark-500">Stock</div>
+                          </div>
+                          <div>
+                            <div className={`text-xs font-mono font-medium ${margin >= 30 ? 'text-emerald-500' : margin >= 15 ? 'text-amber-400' : 'text-red-400'}`}>
+                              {margin}%
+                            </div>
+                            <div className="text-[10px] text-dark-500">Margen</div>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center justify-between pt-2 border-t border-white/5">
+                          <span className="text-[10px] text-dark-500">{product.category}</span>
+                          <div className="flex items-center gap-2">
+                            <button onClick={() => openEdit(product)} className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-white/5 text-dark-500 hover:text-primary-light transition-all" title="Editar producto">
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+                                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+                              </svg>
+                            </button>
+                            <button onClick={() => remove(product.id)} className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-red-500/10 text-dark-500 hover:text-red-400 transition-all" title="Eliminar producto">
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+                                <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2" />
+                              </svg>
+                            </button>
+                          </div>
+                        </div>
+                      </motion.div>
+                    )
+                  })}
+                </AnimatePresence>
+              </div>
+
+              {/* Table (desktop) */}
+              <div className="hidden md:block overflow-x-auto -mx-6">
                 <table className="w-full min-w-[700px]">
                   <thead>
                     <tr className="text-[11px] text-dark-500 font-semibold uppercase tracking-wider border-b border-white/5">
-                      <th className="text-left py-3 px-4 sm:px-5">Producto</th>
-                      <th className="text-left py-3 px-3 hidden md:table-cell">SKU</th>
-                      <th className="text-left py-3 px-3 hidden sm:table-cell">Categoría</th>
+                      <th className="text-left py-3 px-5">Producto</th>
+                      <th className="text-left py-3 px-3">SKU</th>
+                      <th className="text-left py-3 px-3">Categoría</th>
                       <th className="text-right py-3 px-3">Precio</th>
-                      <th className="text-right py-3 px-3 hidden sm:table-cell">Stock</th>
+                      <th className="text-right py-3 px-3">Stock</th>
                       <th className="text-center py-3 px-3">Estado</th>
-                      <th className="text-right py-3 px-4 sm:px-5 w-20">Acción</th>
+                      <th className="text-right py-3 px-5 w-20">Acción</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -486,7 +557,7 @@ export function DemoSection() {
                             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                             className="border-b border-white/5 group hover:bg-white/[0.015] transition-colors"
                           >
-                            <td className="py-3 px-4 sm:px-5">
+                            <td className="py-3 px-5">
                               <div className="flex items-center gap-3">
                                 <ProductThumb product={product} size="sm" />
                                 <div>
@@ -495,8 +566,8 @@ export function DemoSection() {
                                 </div>
                               </div>
                             </td>
-                            <td className="py-3 px-3 text-xs text-dark-500 font-mono hidden md:table-cell">{product.sku}</td>
-                            <td className="py-3 px-3 hidden sm:table-cell">
+                            <td className="py-3 px-3 text-xs text-dark-500 font-mono">{product.sku}</td>
+                            <td className="py-3 px-3">
                               <span
                                 className="text-[11px] px-2 py-0.5 rounded-md font-medium"
                                 style={{
@@ -513,7 +584,7 @@ export function DemoSection() {
                                 {margin}% margen
                               </div>
                             </td>
-                            <td className="py-3 px-3 text-right hidden sm:table-cell">
+                            <td className="py-3 px-3 text-right">
                               <div className={`text-sm font-mono font-medium ${product.status === 'out' ? 'text-red-400' : product.status === 'low' ? 'text-amber-400' : 'text-dark-100'}`}>
                                 {product.stock}
                               </div>
@@ -527,16 +598,16 @@ export function DemoSection() {
                                 {st.label}
                               </span>
                             </td>
-                            <td className="py-3 px-4 sm:px-5 text-right">
+                            <td className="py-3 px-5 text-right">
                               <div className="flex items-center justify-end gap-0.5 opacity-0 group-hover:opacity-100 transition-all duration-200">
-                                <button onClick={() => openEdit(product)} className="p-2 rounded-lg hover:bg-white/5 text-dark-500 hover:text-primary-light transition-all" title="Editar producto">
-                                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+                                <button onClick={() => openEdit(product)} className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-white/5 text-dark-500 hover:text-primary-light transition-all" title="Editar producto">
+                                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
                                     <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
                                     <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
                                   </svg>
                                 </button>
-                                <button onClick={() => remove(product.id)} className="p-2 rounded-lg hover:bg-red-500/10 text-dark-500 hover:text-red-400 transition-all" title="Eliminar producto">
-                                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+                                <button onClick={() => remove(product.id)} className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-red-500/10 text-dark-500 hover:text-red-400 transition-all" title="Eliminar producto">
+                                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
                                     <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2" />
                                   </svg>
                                 </button>
